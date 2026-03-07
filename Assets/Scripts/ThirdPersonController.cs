@@ -39,6 +39,9 @@ namespace StarterAssets
         [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
         public float Gravity = -15.0f;
 
+        [Tooltip("Time after walking off a ledge where the player can still jump")]
+        public float CoyoteTime = 0.2f;
+
         [Space(10)]
         [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
         public float JumpTimeout = 0.50f;
@@ -90,6 +93,7 @@ namespace StarterAssets
         // timeout deltatime
         private float _jumpTimeoutDelta;
         private float _fallTimeoutDelta;
+        private float _coyoteTimeCounter;
 
         // animation IDs
         private int _animIDSpeed;
@@ -286,6 +290,9 @@ namespace StarterAssets
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
 
+                // reset coyote time counter while grounded
+                _coyoteTimeCounter = CoyoteTime;
+
                 // update animator if using character
                 if (_hasAnimator)
                 {
@@ -299,7 +306,7 @@ namespace StarterAssets
                     _verticalVelocity = -2f;
                 }
 
-                // Jump
+                // Jump (also allowed during coyote time window)
                 if (_input.jump && _jumpTimeoutDelta <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
@@ -323,6 +330,9 @@ namespace StarterAssets
                 // reset the jump timeout timer
                 _jumpTimeoutDelta = JumpTimeout;
 
+                // tick down coyote time counter while airborne
+                _coyoteTimeCounter -= Time.deltaTime;
+
                 // fall timeout
                 if (_fallTimeoutDelta >= 0.0f)
                 {
@@ -334,6 +344,21 @@ namespace StarterAssets
                     if (_hasAnimator)
                     {
                         _animator.SetBool(_animIDFreeFall, true);
+                    }
+                }
+
+                // allow jumping during coyote time window if the player walked off a ledge
+                // (coyote time is only valid when falling naturally, not after a jump)
+                if (_input.jump && _coyoteTimeCounter > 0f && _verticalVelocity <= 0f)
+                {
+                    _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+                    _coyoteTimeCounter = 0f; // consume coyote time so it can't be used again
+
+                    // update animator if using character
+                    if (_hasAnimator)
+                    {
+                        _animator.SetBool(_animIDJump, true);
+                        _animator.SetBool(_animIDFreeFall, false);
                     }
                 }
 
@@ -387,6 +412,14 @@ namespace StarterAssets
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
             }
+        }
+
+        public void ResetVelocity()
+        {
+            _verticalVelocity = 0f;
+            _speed = 0f;
+            _animationBlend = 0f;
+            _targetRotation = 0f;
         }
     }
 }

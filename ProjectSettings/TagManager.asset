@@ -6,6 +6,8 @@ TagManager:
   tags:
   - CinemachineTarget
   - Collectable
+  - Hazard
+  - Checkpoint
   layers:
   - Default
   - TransparentFX
