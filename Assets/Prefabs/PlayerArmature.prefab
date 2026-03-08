@@ -1144,6 +1144,7 @@ MonoBehaviour:
   FootstepAudioVolume: 0.3
   JumpHeight: 1.2
   Gravity: -15
+  CoyoteTime: 0.2
   JumpTimeout: 0.3
   FallTimeout: 0.15
   Grounded: 1
@@ -1306,6 +1307,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   points: 0
   textUi: {fileID: 0}
+  PickupAudioClips:
+  - {fileID: 8300000, guid: 96e23e93f901f5647904804c7ece361a, type: 3}
 --- !u!114 &2297725707233024427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1320,6 +1323,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   deathLevel: -20
   characterController: {fileID: 4416926081852918491}
+  DeathAudioClip: {fileID: 8300000, guid: 7da4f99dbca87994cb786992d3e54edc, type: 3}
+  CheckpointAudioClip: {fileID: 8300000, guid: 7ba45bea2802e114db4321fb03f688af, type: 3}
 --- !u!114 &6786874467150234127
 MonoBehaviour:
   m_ObjectHideFlags: 0

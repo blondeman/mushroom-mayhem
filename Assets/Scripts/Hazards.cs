@@ -9,6 +9,9 @@ public class Hazards : MonoBehaviour
     public float deathLevel = -20;
     public CharacterController characterController;
 
+    public AudioClip DeathAudioClip;
+    public AudioClip CheckpointAudioClip;
+
     private void Start()
     {
         startPosition = transform.position;
@@ -21,8 +24,9 @@ public class Hazards : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        if(other.gameObject.tag == "Checkpoint") {
+        if(other.gameObject.tag == "Checkpoint" && startPosition != other.transform.position) {
             startPosition = other.transform.position;
+            AudioSource.PlayClipAtPoint(CheckpointAudioClip, transform.position, 1);
         }   
     }
 
@@ -34,12 +38,15 @@ public class Hazards : MonoBehaviour
 
     private void Reset()
     {
+
         var tpc = GetComponent<ThirdPersonController>();
         tpc.enabled = false;
         characterController.enabled = false;
 
         transform.position = startPosition;
         tpc.ResetVelocity();
+
+        AudioSource.PlayClipAtPoint(DeathAudioClip, transform.position, 1);
 
         StartCoroutine(ReEnableAfterFrame(tpc));
     }

@@ -404,9 +404,9 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: eba8e0123ba668f4e983d2c1a17733ce, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.231
-  m_Pitch: 1
-  Loop: 0
+  m_Volume: 0.5
+  m_Pitch: 1.5
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -500,6 +500,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5c5d339367c2094abe90aebc1f4c92a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  source: {fileID: 802580210}
+  targetPitch: 1
 --- !u!4 &802580212
 Transform:
   m_ObjectHideFlags: 0

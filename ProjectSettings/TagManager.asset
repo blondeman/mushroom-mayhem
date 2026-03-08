@@ -8,6 +8,7 @@ TagManager:
   - Collectable
   - Hazard
   - Checkpoint
+  - CollectablePoison
   layers:
   - Default
   - TransparentFX
